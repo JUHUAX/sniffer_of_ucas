@@ -5,7 +5,6 @@ import dpkt
 import time
 import datetime
 
-global ans
 ans = {}
 
 def IP_callback(win_pcap, param, header, pkt_data):
@@ -19,6 +18,7 @@ def IP_callback(win_pcap, param, header, pkt_data):
     
     
 def doIP(packet):
+    global ans
     ans = {"protocol":"ip",
         "time":time.strftime('%Y-%m-%d %H:%M:%S',(time.localtime())),
            'src':inet_ntop(AF_INET, packet.src) , 'dst':inet_ntop(AF_INET, packet.src),
@@ -27,16 +27,20 @@ def doIP(packet):
            }
 
 def doIP6(packet):
+    global ans
     ans = {"protocol":"ipv6",
         "time":time.strftime('%Y-%m-%d %H:%M:%S',(time.localtime())),
            'src':inet_ntop(AF_INET6, packet.src) , 'dst':inet_ntop(AF_INET6, packet.dst),
            'protocol':packet.nxt, 'len':packet.plen, 'hop limit':packet.hlim
            }
+    # print(ans)
 
 def forIP(device_name):
+    global ans
     WinPcapUtils.capture_on_device_name(device_name=device_name, callback=IP_callback)
     print(ans)
     return
 
 
 forIP("\\Device\\NPF_{5D0D792C-E3F1-484E-8D1F-9C224535DEB6}")
+print(ans)
