@@ -5,7 +5,7 @@ def getNIC(op="all"):
     if op == "all":
         ans = []
         for name, description in NIC.items():
-            ans.append(description + ": " + name)
+            ans.append(description + ":" + name)
         return ans
     
     if op == "name":
