@@ -18,21 +18,17 @@ def apply_callback(win_pcap, param, header, pkt_data):
         doHTTP(apply_packet)
     
     
-def doDNS(packet):
-    ans = {"protocol":"dns",
-           "length":,
-           "falgs":,
-           "questions":,
-           "answer rrs":,
-           "additional rrs":,
-           "queries":,
-        }
+# def doDNS(packet):
+#     ans = {"protocol":"dns",
+#            "length":,
+#            "falgs":,
+#            "questions":,
+#            "answer rrs":,
+#            "additional rrs":,
+#            "queries":,
+#         }
 
 
-def forIP(device_name):
-    WinPcapUtils.capture_on_device_name(device_name=device_name, callback=apply_callback)
-    print(ans)
-    return
 
 
 forIP("\\Device\\NPF_{5D0D792C-E3F1-484E-8D1F-9C224535DEB6}")

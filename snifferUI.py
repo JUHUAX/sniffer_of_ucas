@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-# Form implementation generated from reading ui file 'sniffer.ui'
+# Form implementation generated from reading ui file '.\sniffer.ui'
 #
 # Created by: PyQt5 UI code generator 5.15.9
 #
@@ -14,7 +14,7 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 class Ui_Form(object):
     def setupUi(self, Form):
         Form.setObjectName("Form")
-        Form.resize(1124, 846)
+        Form.resize(1782, 856)
         self.verticalLayoutWidget = QtWidgets.QWidget(Form)
         self.verticalLayoutWidget.setGeometry(QtCore.QRect(50, 60, 141, 91))
         self.verticalLayoutWidget.setObjectName("verticalLayoutWidget")
@@ -41,7 +41,7 @@ class Ui_Form(object):
         self.inputRules.setObjectName("inputRules")
         self.verticalLayout_4.addWidget(self.inputRules)
         self.verticalLayoutWidget_3 = QtWidgets.QWidget(Form)
-        self.verticalLayoutWidget_3.setGeometry(QtCore.QRect(50, 170, 791, 650))
+        self.verticalLayoutWidget_3.setGeometry(QtCore.QRect(50, 170, 1471, 650))
         self.verticalLayoutWidget_3.setObjectName("verticalLayoutWidget_3")
         self.verticalLayout_5 = QtWidgets.QVBoxLayout(self.verticalLayoutWidget_3)
         self.verticalLayout_5.setContentsMargins(0, 0, 0, 0)
@@ -60,13 +60,26 @@ class Ui_Form(object):
         self.protocolTable.setHorizontalHeaderItem(3, item)
         item = QtWidgets.QTableWidgetItem()
         self.protocolTable.setHorizontalHeaderItem(4, item)
-        self.protocolTable.setEditTriggers(QtWidgets.QAbstractItemView.NoEditTriggers)
         self.verticalLayout_5.addWidget(self.protocolTable)
         self.horizontalLayout = QtWidgets.QHBoxLayout()
         self.horizontalLayout.setObjectName("horizontalLayout")
-        self.protocolAnalysis = QtWidgets.QTextBrowser(self.verticalLayoutWidget_3)
-        self.protocolAnalysis.setObjectName("protocolAnalysis")
-        self.horizontalLayout.addWidget(self.protocolAnalysis)
+        self.showLayers = QtWidgets.QTreeWidget(self.verticalLayoutWidget_3)
+        self.showLayers.setObjectName("showLayers")
+        item_0 = QtWidgets.QTreeWidgetItem(self.showLayers)
+        item_1 = QtWidgets.QTreeWidgetItem(item_0)
+        item_1 = QtWidgets.QTreeWidgetItem(item_0)
+        item_0 = QtWidgets.QTreeWidgetItem(self.showLayers)
+        item_1 = QtWidgets.QTreeWidgetItem(item_0)
+        item_1 = QtWidgets.QTreeWidgetItem(item_0)
+        item_1 = QtWidgets.QTreeWidgetItem(item_0)
+        item_1 = QtWidgets.QTreeWidgetItem(item_0)
+        item_1 = QtWidgets.QTreeWidgetItem(item_0)
+        item_0 = QtWidgets.QTreeWidgetItem(self.showLayers)
+        item_1 = QtWidgets.QTreeWidgetItem(item_0)
+        item_1 = QtWidgets.QTreeWidgetItem(item_0)
+        item_1 = QtWidgets.QTreeWidgetItem(item_0)
+        item_1 = QtWidgets.QTreeWidgetItem(item_0)
+        self.horizontalLayout.addWidget(self.showLayers)
         self.showBinary = QtWidgets.QTextBrowser(self.verticalLayoutWidget_3)
         self.showBinary.setObjectName("showBinary")
         self.horizontalLayout.addWidget(self.showBinary)
@@ -90,7 +103,7 @@ class Ui_Form(object):
         self.outputButton.setObjectName("outputButton")
         self.horizontalLayout_2.addWidget(self.outputButton)
         self.verticalLayoutWidget_4 = QtWidgets.QWidget(Form)
-        self.verticalLayoutWidget_4.setGeometry(QtCore.QRect(880, 170, 195, 677))
+        self.verticalLayoutWidget_4.setGeometry(QtCore.QRect(1540, 150, 195, 677))
         self.verticalLayoutWidget_4.setObjectName("verticalLayoutWidget_4")
         self.verticalLayout_7 = QtWidgets.QVBoxLayout(self.verticalLayoutWidget_4)
         self.verticalLayout_7.setContentsMargins(0, 0, 0, 0)
@@ -162,16 +175,24 @@ class Ui_Form(object):
         item.setText(_translate("Form", "长度"))
         item = self.protocolTable.horizontalHeaderItem(4)
         item.setText(_translate("Form", "info"))
-        self.protocolAnalysis.setHtml(_translate("Form", "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/REC-html40/strict.dtd\">\n"
-"<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css\">\n"
-"p, li { white-space: pre-wrap; }\n"
-"</style></head><body style=\" font-family:\'SimSun\'; font-size:9pt; font-weight:400; font-style:normal;\">\n"
-"<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><br /></p></body></html>"))
-        self.showBinary.setHtml(_translate("Form", "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/REC-html40/strict.dtd\">\n"
-"<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css\">\n"
-"p, li { white-space: pre-wrap; }\n"
-"</style></head><body style=\" font-family:\'SimSun\'; font-size:9pt; font-weight:400; font-style:normal;\">\n"
-"<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><br /></p></body></html>"))
+        self.showLayers.headerItem().setText(0, _translate("Form", "协议分析"))
+        __sortingEnabled = self.showLayers.isSortingEnabled()
+        self.showLayers.setSortingEnabled(False)
+        self.showLayers.topLevelItem(0).setText(0, _translate("Form", "链路层数据"))
+        self.showLayers.topLevelItem(0).child(0).setText(0, _translate("Form", "源MAC地址："))
+        self.showLayers.topLevelItem(0).child(1).setText(0, _translate("Form", "目的MAC地址："))
+        self.showLayers.topLevelItem(1).setText(0, _translate("Form", "IP层数据"))
+        self.showLayers.topLevelItem(1).child(0).setText(0, _translate("Form", "版本："))
+        self.showLayers.topLevelItem(1).child(1).setText(0, _translate("Form", "源IP："))
+        self.showLayers.topLevelItem(1).child(2).setText(0, _translate("Form", "目的IP："))
+        self.showLayers.topLevelItem(1).child(3).setText(0, _translate("Form", "上层协议："))
+        self.showLayers.topLevelItem(1).child(4).setText(0, _translate("Form", "长度："))
+        self.showLayers.topLevelItem(2).setText(0, _translate("Form", "运输层数据"))
+        self.showLayers.topLevelItem(2).child(0).setText(0, _translate("Form", "协议类型："))
+        self.showLayers.topLevelItem(2).child(1).setText(0, _translate("Form", "源端口号："))
+        self.showLayers.topLevelItem(2).child(2).setText(0, _translate("Form", "目的端口号："))
+        self.showLayers.topLevelItem(2).child(3).setText(0, _translate("Form", "长度"))
+        self.showLayers.setSortingEnabled(__sortingEnabled)
         self.startButton.setText(_translate("Form", "开始"))
         self.stopButton.setText(_translate("Form", "停止"))
         self.importButton.setText(_translate("Form", "导入"))
