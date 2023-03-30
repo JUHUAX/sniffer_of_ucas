@@ -48,6 +48,7 @@ class Ui_Form(object):
         self.verticalLayout_5.setObjectName("verticalLayout_5")
         self.protocolTable = QtWidgets.QTableWidget(self.verticalLayoutWidget_3)
         self.protocolTable.setObjectName("protocolTable")
+        self.protocolTable.setContextMenuPolicy(QtCore.Qt.CustomContextMenu)
         self.protocolTable.setColumnCount(5)
         self.protocolTable.setRowCount(0)
         item = QtWidgets.QTableWidgetItem()
@@ -159,7 +160,9 @@ class Ui_Form(object):
 
         self.retranslateUi(Form)
         QtCore.QMetaObject.connectSlotsByName(Form)
-
+        
+    
+    
     def retranslateUi(self, Form):
         _translate = QtCore.QCoreApplication.translate
         Form.setWindowTitle(_translate("Form", "Form"))

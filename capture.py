@@ -3,7 +3,7 @@ from foreth import ethernetCallback
 
 
 
-def analysisPcket(device_name):
+def capturePacket(device_name):
     WinPcapUtils.capture_on_device_name(device_name=device_name, callback=ethernetCallback)
 
 

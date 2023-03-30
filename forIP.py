@@ -47,7 +47,7 @@ def doIP(packet):
     global curPacket
     curPacket = {"protocol":"ip",
         "time":time.strftime('%Y-%m-%d %H:%M:%S',(time.localtime())),
-           'src':inet_ntop(AF_INET, packet.src) , 'dst':inet_ntop(AF_INET, packet.src),
+           'src':inet_ntop(AF_INET, packet.src) , 'dst':inet_ntop(AF_INET, packet.dst),
            'protocol':getProtype(packet.p), 'len':packet.len, 'ttl':packet.ttl,
            'df':packet.df, 'mf':packet.mf, 'offset':packet.offset, 'checksum':packet.sum,
            "data": packet.data
@@ -72,7 +72,7 @@ def readcurPacket():
 def doIPChoose(packet):
     curPacket = {"protocol":"ip",
         "time":time.strftime('%Y-%m-%d %H:%M:%S',(time.localtime())),
-           'src':inet_ntop(AF_INET, packet.src) , 'dst':inet_ntop(AF_INET, packet.src),
+           'src':inet_ntop(AF_INET, packet.src) , 'dst':inet_ntop(AF_INET, packet.dst),
            'protocol':getProtype(packet.p), 'len':packet.len, 'ttl':packet.ttl,
            'df':packet.df, 'mf':packet.mf, 'offset':packet.offset, 'checksum':packet.sum,
            "data": packet.data

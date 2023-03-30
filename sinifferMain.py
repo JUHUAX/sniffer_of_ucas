@@ -1,17 +1,19 @@
 import sys
 import threading
-from PyQt5.QtWidgets import QApplication, QMainWindow, QTableWidgetItem
+from PyQt5.QtWidgets import QApplication, QMainWindow, QTableWidgetItem, QMenu, QMessageBox
 from PyQt5.QtCore import *
 from snifferUI import Ui_Form
 from selectNIC import getNIC
 import forIP
-from analysis import analysisPcket
+from capture import capturePacket
 import foreth
 from scapy.all import hexdump
 from fileop import savePcpFile, readPcpFile
+from tracePacket import traceIPandPort
 
 class snifferMain(QMainWindow, Ui_Form):
     packetCountSingnl = pyqtSignal(list)
+    updateProtocolListSingnl = pyqtSignal(list)
     def __init__(self, parent=None):
         super(snifferMain, self).__init__(parent)
         self.setupUi(self)
@@ -24,15 +26,59 @@ class snifferMain(QMainWindow, Ui_Form):
         self.stopButton.clicked.connect(self.setStopButton)
         self.protocolTable.itemClicked.connect(self.choosePacket)
         self.packetCountSingnl.connect(self.updateCount)
+        self.updateProtocolListSingnl.connect(self.updateProtocolList)
         self.outputButton.clicked.connect(self.outPutPacket)
         self.importButton.clicked.connect(self.importPacket)
+        self.protocolTable.customContextMenuRequested.connect(self.generateMenu)
+    
+    def generateMenu(self,pos):
+        rowNum = 0
+        for i in self.protocolTable.selectionModel().selection().indexes():
+            rowNum = i.row()
+            print(rowNum)
+        menu = QMenu()
+        item = menu.addAction(u"追踪")
+        action = menu.exec_(self.protocolTable.mapToGlobal(pos))
+        if action == item:
+            self.trace(rowNum)
+        else:
+            return
         
+    
+    def trace(self, index):
+        traceAns = traceIPandPort(index)
+        if traceAns == False:
+            msg_box = QMessageBox(QMessageBox.Critical, '错误', '你选择的并不是tcp或udp报文')
+            msg_box.exec_()
+            return
+        self.updateProtocolListSingnl.emit(traceAns)
+        
+    def updateProtocolList(self, packet):
+        self.protocolTable.setRowCount(0)
+        for i in range(len(packet)):
+            data = forIP.analysisIP(packet[i].data)
+            self.protocolTable.setRowCount(i + 1)
+            newItem=QTableWidgetItem(str(data["src"]))
+            self.protocolTable.setItem(i,0,newItem)
+            newItem=QTableWidgetItem(str(data["dst"]))
+            self.protocolTable.setItem(i,1,newItem)
+            newItem=QTableWidgetItem(str(data["protocol"]))
+            self.protocolTable.setItem(i,2,newItem)
+            newItem=QTableWidgetItem(str(data["len"]))
+            self.protocolTable.setItem(i,3,newItem)
+            newItem=QTableWidgetItem("待定")
+            self.protocolTable.setItem(i,4,newItem)
+            self.protocolTable.scrollToBottom()
+    
+    
+    
     def outPutPacket(self):
         savePcpFile()
     
     def importPacket(self):
         readPcpFile()
         packet = foreth.readcurPacket()
+        self.protocolTable.setRowCount(0)
         for i in range(len(packet)):
             data = forIP.analysisIP(packet[i].data)
             self.protocolTable.setRowCount(i + 1)
@@ -122,6 +168,7 @@ class snifferMain(QMainWindow, Ui_Form):
         udp_sum = 0
         icmp_sum = 0
         ip_sum = 0
+        self.protocolTable.setRowCount(0)
         while self.startButtonValue :
             tmp = forIP.readcurPacket()
             if packet == tmp:
@@ -161,7 +208,7 @@ class snifferMain(QMainWindow, Ui_Form):
     
     def showProtocolList(self):
         # protocolList = threading.Thread(target=forIP, kwargs={"device_name": "\\Device\\NPF_{5D0D792C-E3F1-484E-8D1F-9C224535DEB6}"})
-        protocolList = threading.Thread(target=analysisPcket, kwargs={"device_name": self.curNIC})
+        protocolList = threading.Thread(target=capturePacket, kwargs={"device_name": self.curNIC})
         protocolList.start()
         ask = threading.Thread(target=self.askLoop)
         ask.start()
