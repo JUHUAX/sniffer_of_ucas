@@ -12,23 +12,60 @@ def apply_callback(win_pcap, param, header, pkt_data):
     eth = dpkt.ethernet.Ethernet(pkt_data)
     apply_packet = eth.data.data.data
     
-    if isinstance(apply_packet, dpkt.dns.DNS):
-        doDNS(apply_packet)
-    elif isinstance(apply_packet, dpkt.http):
-        doHTTP(apply_packet)
     
+
+def analysisHttp(data):
+    tmp = ""
+    print("http!!!")
+    if isinstance(data, dpkt.http.Request):
+        request = dpkt.http.Request(data)
+        request.unpack(tmp)
+        packet = {
+            "protocol":"http",
+            "type":"request",
+            "method":request.method,
+            "version":request.version,
+            "url":request.uri,
+            "headers":request.headers,
+            "body":request.body
+        }
+        print(packet["headers"])
+    elif isinstance(data, dpkt.http.Response):
+        response = dpkt.http.Response(data)
+        response.unpack(tmp)
+        packet = {
+            "protocol":"http",
+            "type":"response",
+            "version":response.version,
+            "status":response.status,
+            "reason":response.reason,
+            "body":response.body
+        }
     
-# def doDNS(packet):
-#     ans = {"protocol":"dns",
-#            "length":,
-#            "falgs":,
-#            "questions":,
-#            "answer rrs":,
-#            "additional rrs":,
-#            "queries":,
-#         }
+    return packet
 
+def analysisDns(data):
+    print("dns!!!")
+    if isinstance(data, dpkt.dns.DNS):
+        data = dpkt.dns.DNS(data)
+        packet = {
+            "protocol":"dns",
+            "op":data.op,
+            "qd":data.qd,
+            "an":data.aa
+        }
+        return packet
+    return {
+            "protocol":"",
+            "op":"",
+            "qd":"",
+            "an":""
+        }
+    
 
-
-
-forIP("\\Device\\NPF_{5D0D792C-E3F1-484E-8D1F-9C224535DEB6}")
+def analysisApply(data):
+    if isinstance(data, dpkt.http.Request) or isinstance(data, dpkt.http.Response):
+        return analysisHttp(data)
+    if isinstance(data, dpkt.dns.DNS):
+        return analysisDns(data)
+    return {}

@@ -1,13 +1,13 @@
 import dpkt
 from PyQt5.QtWidgets import QFileDialog 
-from foreth import readcurPacket, sendPacket
+from capture import allPacketRaw, sendPacket
 
 
 def savePcpFile():
     filename, filter_index = QFileDialog.getSaveFileName()
     if filename == "":
         return
-    data = readcurPacket()
+    data = allPacketRaw()
     with open(filename, 'wb') as f:
         writer = dpkt.pcap.Writer(f)
         for i in range(len(data)):

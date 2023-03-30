@@ -1,2 +1,0 @@
-from winpcapy import WinPcap
-
