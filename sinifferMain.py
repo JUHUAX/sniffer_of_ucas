@@ -5,8 +5,7 @@ from PyQt5.QtCore import *
 from snifferUI import Ui_Form
 from selectNIC import getNIC
 import forIP
-from capture import capturePacket, readcurPacket, analyCurPacket
-import foreth
+from capture import capturePacket, readcurPacket, allPacket
 from scapy.all import hexdump
 from fileop import savePcpFile, readPcpFile
 from tracePacket import traceIPandPort
@@ -72,8 +71,6 @@ class snifferMain(QMainWindow, Ui_Form):
             self.protocolTable.setItem(i,2,newItem)
             newItem=QTableWidgetItem(str(data["len"]))
             self.protocolTable.setItem(i,3,newItem)
-            newItem=QTableWidgetItem("待定")
-            self.protocolTable.setItem(i,4,newItem)
             self.protocolTable.scrollToBottom()
     
     
@@ -83,22 +80,11 @@ class snifferMain(QMainWindow, Ui_Form):
     
     def importPacket(self):
         readPcpFile()
-        packet = foreth.readcurPacket()
+        packet = allPacket()
         self.protocolTable.setRowCount(0)
         for i in range(len(packet)):
-            data = forIP.analysisIP(packet[i].data)
-            self.protocolTable.setRowCount(i + 1)
-            newItem=QTableWidgetItem(str(data["src"]))
-            self.protocolTable.setItem(i,0,newItem)
-            newItem=QTableWidgetItem(str(data["dst"]))
-            self.protocolTable.setItem(i,1,newItem)
-            newItem=QTableWidgetItem(str(data["protocol"]))
-            self.protocolTable.setItem(i,2,newItem)
-            newItem=QTableWidgetItem(str(data["len"]))
-            self.protocolTable.setItem(i,3,newItem)
-            newItem=QTableWidgetItem("待定")
-            self.protocolTable.setItem(i,4,newItem)
-            self.protocolTable.scrollToBottom()
+            time.sleep(0.001)
+            self.updateProtocolListByLastRowSingnl.emit(packet[i])
             
     
     def choosePacket(self, item=None):
@@ -222,8 +208,6 @@ class snifferMain(QMainWindow, Ui_Form):
         self.protocolTable.setItem(count,2,newItem)
         newItem=QTableWidgetItem(str(packet["len"]))
         self.protocolTable.setItem(count,3,newItem)
-        newItem=QTableWidgetItem("待定")
-        self.protocolTable.setItem(count,4,newItem)
         self.protocolTable.scrollToBottom()
     
     def analysisPacket(self):

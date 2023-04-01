@@ -60,12 +60,13 @@ def analyCurPacket(data):
     ipLayerPacket = analysisIP(ethLayerPacket["data"])
     transLayerPacket = {}
     transLayerPacket = analysisTrans(ipLayerPacket["data"])
-    if (transLayerPacket["sport"] == 80 or transLayerPacket["sport"] == 53):
-        print("http or dns!!!!")
-        print(str(transLayerPacket["data"], encoding="utf-8"))
+    # if (transLayerPacket["sport"] == 80 or transLayerPacket["sport"] == 53):
+    #     print("http or dns!!!!")
+    #     print(str(transLayerPacket["data"], encoding="utf-8"))
     if transLayerPacket == {}:
-        print(ipLayerPacket)
-    applyLayerPacket = analysisApply(transLayerPacket["data"])
+        applyLayerPacket = {}
+    else:
+        applyLayerPacket = analysisApply(transLayerPacket["data"])
     return {"ethLayer": ethLayerPacket,
             "ipLayer": ipLayerPacket,
             "transLayer": transLayerPacket,

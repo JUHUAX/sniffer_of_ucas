@@ -64,4 +64,5 @@ def analysisTrans(data):
     elif isinstance(data, dpkt.icmp6.ICMP6):
         curPacket = doicmp6(data)
         return curPacket
+    return {}
     
