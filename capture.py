@@ -16,7 +16,7 @@ def capturePacket(device_name, filter):
     if filter == "":
         WinPcapUtils.capture_on_device_name(device_name=device_name, callback=ethernetCallback)
     else:
-        WinPcapUtils.compile_and_capture_on_device_name(device_name=device_name, packet_filter=filter.encode('utf-8'), callback=ethernetCallback)
+        WinPcapUtils.compile_and_capture_on_device_name(device_name=device_name, packet_filter=bytes(filter, encoding='utf-8'), callback=ethernetCallback)
 
 
 
@@ -53,7 +53,6 @@ def sendPacket(data):
 def analyCurPacket(data):
     ethLayerPacket = analysisEth(data)
     if ethLayerPacket["type"] == "arp":
-        print("arp!!!")
         return {"ethLayer": ethLayerPacket,
             "ARP":analysisARP(ethLayerPacket["data"])
             }
@@ -72,5 +71,10 @@ def analyCurPacket(data):
             "transLayer": transLayerPacket,
             "applyLayer":applyLayerPacket
             }
-
+    
+def clearAll():
+    global curPacket
+    global curPacketRaw
+    curPacketRaw.clear()
+    curPacket.clear()
 # capturePacket("\\Device\\NPF_{5D0D792C-E3F1-484E-8D1F-9C224535DEB6}")

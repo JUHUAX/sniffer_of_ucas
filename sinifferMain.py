@@ -5,7 +5,7 @@ from PyQt5.QtCore import *
 from snifferUI import Ui_Form
 from selectNIC import getNIC
 import forIP
-from capture import capturePacket, readcurPacket, allPacket
+from capture import capturePacket, readcurPacket, allPacket, clearAll
 from scapy.all import hexdump
 from fileop import savePcpFile, readPcpFile
 from tracePacket import traceIPandPort
@@ -72,6 +72,7 @@ class snifferMain(QMainWindow, Ui_Form):
             newItem=QTableWidgetItem(str(data["len"]))
             self.protocolTable.setItem(i,3,newItem)
             self.protocolTable.scrollToBottom()
+            QApplication.processEvents()
     
     
     
@@ -83,7 +84,6 @@ class snifferMain(QMainWindow, Ui_Form):
         packet = allPacket()
         self.protocolTable.setRowCount(0)
         for i in range(len(packet)):
-            time.sleep(0.001)
             self.updateProtocolListByLastRowSingnl.emit(packet[i])
             
     
@@ -96,6 +96,7 @@ class snifferMain(QMainWindow, Ui_Form):
             self.analysisChoosePacket([row, col])
     
     def updateShowLayerAndBinary(self, ethLayer, ipLayer, transLayer, applyLayer):
+        QApplication.processEvents()
         _translate = QCoreApplication.translate
         self.showBinary.setText(hexdump(ethLayer["data"], dump=True))
         self.showLayers.topLevelItem(0).setText(0, _translate("Form", "链路层数据"))
@@ -187,7 +188,8 @@ class snifferMain(QMainWindow, Ui_Form):
     def setStopButton(self):
         self.stopButtonValue = True
         self.startButtonValue = False
-    
+        # self.analysis.join()
+        
     def updateProtocolListByLastRow(self, data):
         if isinstance(data["ethLayer"]["data"], dpkt.arp.ARP):
             packet = data["ARP"]
@@ -209,6 +211,7 @@ class snifferMain(QMainWindow, Ui_Form):
         newItem=QTableWidgetItem(str(packet["len"]))
         self.protocolTable.setItem(count,3,newItem)
         self.protocolTable.scrollToBottom()
+        QApplication.processEvents()
     
     def analysisPacket(self):
         packet = {}
@@ -256,11 +259,17 @@ class snifferMain(QMainWindow, Ui_Form):
         self.dnsProtocol.setText(str(l[7]))
     
     
+    def capture(self, f):
+        capturePacket(self.curNIC, f)
+        while 1:
+            if self.startButtonValue == False:
+                return
+    
     def captureProtocolPacket(self, f):
-        protocolList = threading.Thread(target=capturePacket, kwargs={"device_name": self.curNIC, "filter": f})
-        protocolList.start()
-        analysis = threading.Thread(target=self.analysisPacket)
-        analysis.start()
+        self.protocolList = threading.Thread(target=self.capture, kwargs={"f": f})
+        self.protocolList.start()
+        self.analysis = threading.Thread(target=self.analysisPacket)
+        self.analysis.start()
             
         
 
